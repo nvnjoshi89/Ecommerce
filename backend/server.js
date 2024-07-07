@@ -1,0 +1,82 @@
+import path from 'path'
+import express from 'express'
+import dotenv from 'dotenv'
+import connectDB from './config.js/db.js'
+import product from './routes/product.js'
+import cors from 'cors'
+import { fileURLToPath } from 'url';
+
+
+// configure env . hame sanga root ma .env hunale config bhetra path halnu parena
+/* dotenv.config() is used to load environment variables from a .env file into process.env.
+ Here's how it works:
+ Loading the dotenv Module: First, you import the dotenv module, which allows you to work with .env files.
+ Configuring Environment Variables: dotenv.config() is a method provided by the dotenv module. When you call dotenv.config(), it reads the .env file from the current directory and parses the contents. It then assigns any variables defined in that file to process.env, making them accessible throughout your Node.js application.*/
+dotenv.config()
+
+
+const app = express();
+
+// using this our react project will connect to express app on 4000 port
+app.use(cors())
+
+// .....Get the current file's directory..........
+
+// fileURLToPath: This function from the url module converts a file URL to a path. It's necessary because ES modules use URLs to represent file paths.
+// path: This module provides utilities for working with file and directory paths.
+
+// 2. Getting the Current Module's Filename
+// const __filename = fileURLToPath(import.meta.url);
+// import.meta.url: This contains the URL of the current module in ES modules. For example, if your module is located at /home/user/project/server.js, import.meta.url will be 'file:///home/user/project/server.js'.
+// fileURLToPath(import.meta.url): This converts the URL provided by import.meta.url into a file path. The result would be /home/user/project/server.js.
+
+// 3. Getting the Current Module's Directory
+// const __dirname = path.dirname(__filename);
+// path.dirname(__filename): This function returns the directory name of the path specified. Given /home/user/project/server.js, it would return /home/user/project.
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// app.use('/static', express.static(path.join(__dirname, '../public')));
+
+//.......... Database config...........
+connectDB()
+
+
+// .........MIDDLEWARE..........
+
+
+// Parsing: Parsing is the act of taking a string of data and converting it into a format that a program can more easily work with. For JSON, this means converting the string into a JavaScript object.
+// How express.json() Middleware Works
+// 1. Incoming Request: When a client sends a request to your Express server with a JSON payload, the JSON data is sent as a string in the body of the request.
+// 2 .Content-Type Header: The request should have a Content-Type header set to application/json, indicating that the body contains JSON data.
+// 3. Middleware Activation: The express.json() middleware intercepts the request.
+// 4. String Conversion (Parsing): The middleware reads the JSON string from the request body and parses it. This is done using JavaScript's built-in JSON.parse() method.
+// 5. Attachment to req.body: The resulting JavaScript object is then attached to the req.body property of the request object. This allows your route handlers to access the data as a JavaScript object rather than a raw string.
+app.use(express.json())
+
+global.BASE_DIR = path.join(__dirname, '../backend/public')
+global.BASE_URL = process.env.BASE_URL
+
+
+
+
+// ......Routes............
+app.use('/products', product)
+
+
+// ..........API Creation.........
+
+
+app.get('/', (req, res) => {
+    res.send('Welcome to ecommerce app')
+})
+
+// PORT
+const PORT = process.env.PORT || 8000
+
+// run listen
+app.listen(PORT, () => {
+    console.log(`server running on port${PORT}`);
+})
+
