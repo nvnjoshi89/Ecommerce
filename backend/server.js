@@ -17,8 +17,17 @@ dotenv.config()
 
 const app = express();
 
+
 // using this our react project will connect to express app on 4000 port
 app.use(cors())
+// Allow requests from localhost:3000 (or your frontend URL)
+// const corsOptions = {
+//     origin: 'http://localhost:3000', // Replace with your actual frontend URL
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+//     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+// };
+
+// app.use(cors(corsOptions));
 
 // .....Get the current file's directory..........
 
@@ -45,7 +54,7 @@ connectDB()
 
 // .........MIDDLEWARE..........
 
-
+// express.json() is built-in middleware that replaces the need for body-parser's json() middleware. 
 // Parsing: Parsing is the act of taking a string of data and converting it into a format that a program can more easily work with. For JSON, this means converting the string into a JavaScript object.
 // How express.json() Middleware Works
 // 1. Incoming Request: When a client sends a request to your Express server with a JSON payload, the JSON data is sent as a string in the body of the request.
@@ -53,7 +62,15 @@ connectDB()
 // 3. Middleware Activation: The express.json() middleware intercepts the request.
 // 4. String Conversion (Parsing): The middleware reads the JSON string from the request body and parses it. This is done using JavaScript's built-in JSON.parse() method.
 // 5. Attachment to req.body: The resulting JavaScript object is then attached to the req.body property of the request object. This allows your route handlers to access the data as a JavaScript object rather than a raw string.
+// Middleware for parsing application/json
 app.use(express.json())
+
+
+// Middleware for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+// using this our reactjs project connect to expressjs on 4000 port
+app.use(cors())
 
 global.BASE_DIR = path.join(__dirname, '../backend/public')
 global.BASE_URL = process.env.BASE_URL

@@ -1,5 +1,5 @@
 import express from 'express'
-import { createProduct, uploadProductDocument, getProduct, getProductById } from '../controllers/product.js'
+import { createProduct, uploadProductDocument, getProduct, getProductById, deleteProductById } from '../controllers/product.js'
 
 // routes object
 const router = express.Router()
@@ -19,4 +19,5 @@ router
 router
     .route('/:id')
     .get(getProductById)
+    .delete(deleteProductById)
 export default router;

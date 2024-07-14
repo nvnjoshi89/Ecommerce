@@ -1,7 +1,7 @@
 import fs from 'fs'
 import multer from 'multer'
 import product from '../models/product.js'
-
+import path from 'path'
 
 /**
  * Upload Document
@@ -65,11 +65,10 @@ export const createProduct = async (req, res) => {
         } else {
             id = 1;
         }
-
-        const { name, category, new_price, old_price, avialabe } = req.body
+        const { name, category, new_price, old_price } = req.body
         const products = await new product({
             id,
-            name, image: permanentFilePath, category, new_price, old_price, avialabe
+            name, image: permanentFilePath, category, new_price, old_price
         }).save()
         // Move uploaded file to permanent location on server
         fs.renameSync(productFilePath, `${BASE_DIR}${permanentFilePath}`)
@@ -82,9 +81,13 @@ export const createProduct = async (req, res) => {
             message: 'Error in creating product',
             error
         })
+        // Handle unexpected errors, show error message, etc.
+        console.error('Error adding product:', error);
     }
 
 }
+
+
 
 /**
  * GET /products/:id
@@ -118,6 +121,33 @@ export const getProduct = async (req, res) => {
         res.status(500).send({
             success: false,
             message: 'Error in getting product',
+            error
+        })
+    }
+}
+
+/**
+ * DELETE /products/:id
+ * delete products
+  */
+
+export const deleteProductById = async (req, res) => {
+    try {
+        const { id: productId } = req.params
+        const products = await product.findOneAndDelete({ id: productId })
+        if (!products) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found',
+            });
+        }
+        return res.status(204).json({
+            deleted: true
+        })
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: 'Error in deleting product',
             error
         })
     }
