@@ -36,25 +36,6 @@ const AddProduct = () => {
     }
 
     // function for add button. linking our addproduct to our backend
-    // const Add_product = async () => {
-    //     let responseData;
-    //     let product = productDetails;
-
-    //     let formData = new FormData();
-    //     formData.append('product', image);
-
-    //     await fetch('http://localhost:8000/products', {
-    //         method: 'POST',
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Content-Type': 'applicatioin/json'
-    //         },
-    //         // stringfy convert jsondata into javascript
-    //         body: json.stringy(product),
-    //     }).then((res) => res.json()).then((data) => { responseData = data.success ? alert("Product Added") : alert("Failed") })
-
-
-    // }
     const Add_product = async () => {
         try {
             // This initializes a new FormData object, which will hold the key/value pairs representing your form data.
@@ -74,7 +55,7 @@ const AddProduct = () => {
 
             // Response Format: When you make a fetch request and receive a response, the response object contains several properties like status, statusText, headers, and most importantly body.
 
-            // Response Body: The actual data you are interested in (like products) resides in the body of the response. However, the body itself is a readable stream, not directly accessible as an object.
+            // Response Body: The actual data you are interested in (like products) resides in the body of the response. However, the body itself is a readable stream, not directly accessible as an object.Using body: formData in a fetch request is common when you need to send form data, including files, from the client to the server. FormData is a JavaScript object that allows you to construct a set of key/value pairs representing form fields and their values, including files.
 
             // Parsing JSON: To access the JSON data in the response body, you need to call the json() method on the response object. This method reads the body stream to completion and parses it as JSON, returning a promise that resolves with the JavaScript object representation of the JSON data.
 
@@ -82,15 +63,16 @@ const AddProduct = () => {
             const responseData = await response.json();
 
             if (response.ok) {
-                console.log('Product added:', responseData.products);
                 // Optionally reset form fields or show success message
+                console.log('Product added:', responseData.products);
+                alert("Product added")
             } else {
-                console.error('Error adding product:', responseData.message);
                 // Handle error scenario, show error message, etc.
+                console.error('Error adding product:', responseData.message);
             }
         } catch (error) {
-            console.error('Error adding product:', error);
             // Handle unexpected errors, show error message, etc.
+            console.error('Error adding product:', error);
         }
     };
 

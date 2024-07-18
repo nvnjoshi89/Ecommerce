@@ -5,6 +5,7 @@ import connectDB from './config.js/db.js'
 import product from './routes/product.js'
 import cors from 'cors'
 import { fileURLToPath } from 'url';
+import user from './routes/user.js'
 
 
 // configure env . hame sanga root ma .env hunale config bhetra path halnu parena
@@ -48,6 +49,8 @@ const __dirname = path.dirname(__filename);
 
 // app.use('/static', express.static(path.join(__dirname, '../public')));
 
+
+
 //.......... Database config...........
 connectDB()
 
@@ -62,24 +65,34 @@ connectDB()
 // 3. Middleware Activation: The express.json() middleware intercepts the request.
 // 4. String Conversion (Parsing): The middleware reads the JSON string from the request body and parses it. This is done using JavaScript's built-in JSON.parse() method.
 // 5. Attachment to req.body: The resulting JavaScript object is then attached to the req.body property of the request object. This allows your route handlers to access the data as a JavaScript object rather than a raw string.
-// Middleware for parsing application/json
+// Middleware for parsing application/json and application/x-www-form-urlencoded
 app.use(express.json())
-
-
-// Middleware for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+
 
 // using this our reactjs project connect to expressjs on 4000 port
 app.use(cors())
 
+// Define BASE_DIR and BASE_URL
 global.BASE_DIR = path.join(__dirname, '../backend/public')
-global.BASE_URL = process.env.BASE_URL
+global.BASE_URL = process.env.BASE_URL || 'http://localhost:8000'
 
+// Serve static files
+// 1. app.use(...)
+// In Express, app.use() is used to mount middleware functions. Middleware functions are functions that have access to the request object (req), the response object (res), and the next middleware function in the application’s request-response cycle. These functions can perform tasks such as modifying request and response objects, ending the request-response cycle, or calling the next middleware function in the stack.
 
+// 2. '/public'
+// This is the mount path where the middleware function (express.static(BASE_DIR)) will be executed. When a request is made to a URL starting with /public, Express will invoke the middleware function.
+
+// 3. express.static(BASE_DIR)
+// express.static() is a built-in middleware function in Express. It serves static files and is based on the serve-static middleware.
+// BASE_DIR is the absolute path of the directory that contains the static assets you want to serve. In your case, it's '../backend/public'.
+app.use('/public', express.static(BASE_DIR));
 
 
 // ......Routes............
 app.use('/products', product)
+app.use('/auth', user)
 
 
 // ..........API Creation.........

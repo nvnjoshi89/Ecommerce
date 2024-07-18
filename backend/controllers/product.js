@@ -3,6 +3,7 @@ import multer from 'multer'
 import product from '../models/product.js'
 import path from 'path'
 
+
 /**
  * Upload Document
  * limit:5mb
@@ -70,9 +71,10 @@ export const createProduct = async (req, res) => {
             id,
             name, image: permanentFilePath, category, new_price, old_price
         }).save()
+
         // Move uploaded file to permanent location on server
         fs.renameSync(productFilePath, `${BASE_DIR}${permanentFilePath}`)
-        res.status(201).json({ products, BASE_URL })
+        res.status(201).json({ products, BASE_URL, image_url: `${BASE_URL}/public${permanentFilePath}` })
     } catch (error) {
         // Delete uploaded file if an error occurs during database creation
         fs.unlinkSync(req.file.path);
@@ -116,7 +118,8 @@ export const getProductById = async (req, res) => {
 export const getProduct = async (req, res) => {
     try {
         const products = await product.find();
-        return res.status(200).json(products)
+        // return res.status(200).json([...products, { image_url }])
+        return res.status(200).json(products,)
     } catch (error) {
         res.status(500).send({
             success: false,
@@ -133,6 +136,7 @@ export const getProduct = async (req, res) => {
 
 export const deleteProductById = async (req, res) => {
     try {
+        // In the line of code const { id:productId } = req.params, the code is using object destructuring to extract the id property from the req.params object and assign it to a constant named productId.
         const { id: productId } = req.params
         const products = await product.findOneAndDelete({ id: productId })
         if (!products) {
