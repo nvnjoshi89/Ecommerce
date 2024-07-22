@@ -41,8 +41,6 @@ const ListProduct = () => {
         getProduct();  // Call the function to fetch products when the component mounts
     }, [])// Empty dependency array ensures this runs only once
 
-
-
     // Function for cross icon to remove products
     const removeProduct = async (id) => {
         await fetch(`http://localhost:8000/products/${id}`, {

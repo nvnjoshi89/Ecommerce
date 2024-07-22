@@ -6,11 +6,11 @@ import jwt from 'jsonwebtoken';
  * POST /signup
  * create request
  */
-
+// creating the create user endpoint
 export const createUser = async (req, res) => {
     try {
         const { name, email, password } = req.body
-
+        console.log(req.body);
         // checking user
         const existingUser = await user.findOne({ email: email })
         if (existingUser) {
@@ -23,13 +23,13 @@ export const createUser = async (req, res) => {
         // hash password before storing it to database
         const hashedPassword = await hashPassword(password)
 
-
         let cart = {}
         for (let i = 0; i < 300; i++) {
             cart[i] = 0
         }
         // creating user
         const users = await new user({ name, email, password: hashedPassword, cartData: cart }).save()
+        console.log(users);
 
         res.status(201).json({
             success: true,
@@ -38,7 +38,12 @@ export const createUser = async (req, res) => {
         })
 
     } catch (error) {
-
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Error in creating user',
+            error
+        })
     }
 }
 
@@ -47,6 +52,7 @@ export const createUser = async (req, res) => {
  * login Users
  */
 
+// creating the login endpoint
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body

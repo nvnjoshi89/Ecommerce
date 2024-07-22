@@ -6,6 +6,10 @@ import product from './routes/product.js'
 import cors from 'cors'
 import { fileURLToPath } from 'url';
 import user from './routes/user.js'
+import newCollection from './routes/newCollection.js'
+import popularInWomen from './routes/popularInWomen.js'
+import cartData from './routes/cartData.js'
+
 
 
 // configure env . hame sanga root ma .env hunale config bhetra path halnu parena
@@ -19,7 +23,7 @@ dotenv.config()
 const app = express();
 
 
-// using this our react project will connect to express app on 4000 port
+// using this our react project will connect to express app on 8000 port
 app.use(cors())
 // Allow requests from localhost:3000 (or your frontend URL)
 // const corsOptions = {
@@ -29,6 +33,8 @@ app.use(cors())
 // };
 
 // app.use(cors(corsOptions));
+
+
 
 // .....Get the current file's directory..........
 
@@ -47,7 +53,6 @@ app.use(cors())
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// app.use('/static', express.static(path.join(__dirname, '../public')));
 
 
 
@@ -70,9 +75,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 
-// using this our reactjs project connect to expressjs on 4000 port
-app.use(cors())
-
 // Define BASE_DIR and BASE_URL
 global.BASE_DIR = path.join(__dirname, '../backend/public')
 global.BASE_URL = process.env.BASE_URL || 'http://localhost:8000'
@@ -93,6 +95,9 @@ app.use('/public', express.static(BASE_DIR));
 // ......Routes............
 app.use('/products', product)
 app.use('/auth', user)
+app.use('/newcollections', newCollection)
+app.use('/popularinwomens', popularInWomen)
+app.use('/cartdata', cartData)
 
 
 // ..........API Creation.........
