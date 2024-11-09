@@ -1,0 +1,40 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+    width: 100%;
+    max-width: 250px;
+    height: 100vh;
+    background: white;
+    gap: 20px;
+
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 20px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    background-color: #f6f6f6;
+    cursor: pointer;
+}
+
+/* Making responsive */
+
+@media(max-width:800px) {
+    .sidebar {
+        padding: 30px 0px;
+        flex-direction: row;
+        width: 100%;
+        max-width: none;
+        /* The "height: auto" CSS property automatically adjusts an element's height based on its content. It defines an element's new height by expanding or contracting to accommodate the size of its content. */
+        height: auto;
+        justify-content: center;
+    }
+
+    .sidebar-item {
+        /* margin: 0; */
+    }
+}
